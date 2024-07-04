@@ -1,0 +1,39 @@
+server:
+  port: ${SERVER_PORT}
+
+
+spring:
+  application:
+    name:grupo48-orquestrador
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    active: ${SPRING_PROFILE}
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+      database: ${MONGO_DB}
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+camel:
+  springboot:
+    autoConfigurationEnabled: false
+    # keep the application running
+    main-run-controller: true
+
+logging:
+  level:
+    org.springframework: ${LOG_LEVEL}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui-custom.html
