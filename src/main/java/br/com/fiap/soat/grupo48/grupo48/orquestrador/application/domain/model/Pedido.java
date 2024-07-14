@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,9 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Pedido {
 
-    private UUID id;
+    private String id;
 
-    private UUID pedidoId;
+    private String pedidoId;
 
     private List<PassoPedido> passos;
 

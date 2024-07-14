@@ -14,6 +14,7 @@ spring:
       host: ${MONGO_HOST}
       port: ${MONGO_PORT}
       database: ${MONGO_DB}
+      uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin
   rabbitmq:
     host: ${RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
@@ -24,16 +25,57 @@ spring:
 
 camel:
   springboot:
-    autoConfigurationEnabled: false
+    autoConfigurationEnabled: true
     # keep the application running
     main-run-controller: true
+  component:
+    spring-rabbitmq:
+      auto-declare: true
 
 logging:
   level:
     org.springframework: ${LOG_LEVEL}
+    org.apache.camel: ${LOG_LEVEL}
+    org.springframework.data.mongodb: ${LOG_LEVEL}
+    com.mongodb: ${LOG_LEVEL}
 
 springdoc:
   api-docs:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui-custom.html
+
+
+message:
+  orquestrador:
+    exchange: ${EXCHANGE_ORQUESTRADOR}
+    pedido:
+      recebido:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_RECEBIDO}
+        queues: ${QUEUES_ORQUESTRADOR_PEDIDO_RECEBIDO}
+        erro:
+          route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_RECEBIDO_ERRO}
+          queues: ${QUEUES_ORQUESTRADOR_PEDIDO_RECEBIDO_ERRO}
+      registrado:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_REGISTRADO}
+        queues: ${QUEUES_ORQUESTRADOR_PEDIDO_REGISTRADO}
+        erro:
+          route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_REGISTRADO_ERRO}
+          queues: ${QUEUES_ORQUESTRADOR_PEDIDO_REGISTRADO_ERRO}
+  pedido:
+    recebido:
+      exchange: ${EXCHANGE_PEDIDO_RECEBIDO}
+      route-key: ${ROUTEKEY_PEDIDO_RECEBIDO}
+      queues: ${QUEUES_PEDIDO_RECEBIDO}
+      erro:
+        exchange: ${EXCHANGE_PEDIDO_RECEBIDO_ERRO}
+        route-key: ${ROUTEKEY_PEDIDO_RECEBIDO_ERRO}
+        queues: ${QUEUES_PEDIDO_RECEBIDO_ERRO}
+    registrado:
+      exchange: ${EXCHANGE_PEDIDO_REGISTRADO}
+      route-key: ${ROUTEKEY_PEDIDO_REGISTRADO}
+      queues: ${QUEUES_PEDIDO_REGISTRADO}
+      erro:
+        exchange: ${EXCHANGE_PEDIDO_REGISTRADO_ERRO}
+        route-key: ${ROUTEKEY_PEDIDO_REGISTRADO_ERRO}
+        queues: ${QUEUES_PEDIDO_REGISTRADO_ERRO}

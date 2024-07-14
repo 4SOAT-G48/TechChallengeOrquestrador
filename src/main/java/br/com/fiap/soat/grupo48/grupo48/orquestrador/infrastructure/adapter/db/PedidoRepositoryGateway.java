@@ -4,8 +4,8 @@ import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.domain.model.Pe
 import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.service.port.out.IPedidoRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class PedidoRepositoryGateway implements IPedidoRepository {
@@ -17,12 +17,46 @@ public class PedidoRepositoryGateway implements IPedidoRepository {
     }
 
     @Override
-    public Optional<Pedido> buscarPorId(UUID pedidoId) {
-        return this.springPedidoRepository.findById(pedidoId).map(PedidoEntity::toPedido);
+    public Optional<Pedido> buscarPorId(String id) {
+        return this.springPedidoRepository.findById(id).map(PedidoEntity::toPedido);
     }
 
     @Override
-    public Pedido salvar(Pedido pedido) {
-        return null;
+    public Optional<Pedido> buscarPorPedidoId(String pedidoId) {
+        return this.springPedidoRepository.findByPedidoId(pedidoId).map(PedidoEntity::toPedido);
+    }
+
+    @Override
+    public Optional<Pedido> buscarPorIdentificacao(String identificacao) {
+        return this.springPedidoRepository.findByIdentificacao(identificacao).map(PedidoEntity::toPedido);
+    }
+
+    @Override
+    public Optional<Pedido> buscarPorPedidoIdOuIdentificacao(String pedidoId, String identificacao) {
+        return this.springPedidoRepository.findByPedidoIdOrIdentificacao(pedidoId, identificacao).map(PedidoEntity::toPedido);
+    }
+
+    @Override
+    public Pedido salvar(String pedidoId, String identificacao, String nomePasso, String situacao) {
+        Optional<PedidoEntity> pedidoRecuperado = this.springPedidoRepository.findByIdentificacao(identificacao);
+        if (!pedidoRecuperado.isPresent()) {
+            pedidoRecuperado = this.springPedidoRepository.findByPedidoId(pedidoId);
+        }
+
+        PedidoEntity pedido = pedidoRecuperado
+            .orElseGet(() -> PedidoEntity.builder()
+                .pedidoId(pedidoId)
+                .identificacao(identificacao)
+                .build());
+
+
+        PedidoEntity.PassoPedido passo = new PedidoEntity.PassoPedido();
+        passo.setNomePasso(nomePasso);
+        passo.setSituacao(situacao);
+        passo.setTimestamp(LocalDateTime.now());
+
+        pedido.add(passo);
+
+        return this.springPedidoRepository.save(pedido).toPedido();
     }
 }

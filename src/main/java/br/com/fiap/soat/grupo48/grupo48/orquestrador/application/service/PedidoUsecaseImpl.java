@@ -4,11 +4,6 @@ import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.domain.model.Pe
 import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.service.port.in.IPedidoPort;
 import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.service.port.out.IPedidoRepository;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 
 public class PedidoUsecaseImpl implements IPedidoPort {
     private final IPedidoRepository pedidoRepository;
@@ -18,19 +13,7 @@ public class PedidoUsecaseImpl implements IPedidoPort {
     }
 
     @Override
-    public Pedido salvarPasso(UUID pedidoId, String nomePasso, String situacao) {
-        Pedido pedido = this.pedidoRepository.buscarPorId(pedidoId).orElse(new Pedido());
-        pedido.setPedidoId(pedidoId);
-
-        Pedido.PassoPedido passo = new Pedido.PassoPedido();
-        passo.setNomePasso(nomePasso);
-        passo.setSituacao(situacao);
-        passo.setTimestamp(LocalDateTime.now());
-
-        List<Pedido.PassoPedido> passos = pedido.getPassos() != null ? pedido.getPassos() : new ArrayList<>();
-        passos.add(passo);
-        pedido.setPassos(passos);
-
-        return pedidoRepository.salvar(pedido);
+    public Pedido salvarPasso(String pedidoId, String identificacao, String nomePasso, String situacao) {
+        return pedidoRepository.salvar(pedidoId, identificacao, nomePasso, situacao);
     }
 }

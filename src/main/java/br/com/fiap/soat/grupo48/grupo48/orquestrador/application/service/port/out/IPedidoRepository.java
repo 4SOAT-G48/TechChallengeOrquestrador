@@ -3,10 +3,15 @@ package br.com.fiap.soat.grupo48.grupo48.orquestrador.application.service.port.o
 import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.domain.model.Pedido;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface IPedidoRepository {
-    Optional<Pedido> buscarPorId(UUID pedidoId);
+    Optional<Pedido> buscarPorId(String id);
 
-    Pedido salvar(Pedido pedido);
+    Optional<Pedido> buscarPorPedidoId(String pedidoId);
+
+    Optional<Pedido> buscarPorIdentificacao(String identificacao);
+
+    Optional<Pedido> buscarPorPedidoIdOuIdentificacao(String pedidoId, String identificacao);
+
+    Pedido salvar(String pedidoId, String identificacao, String nomePasso, String situacao);
 }

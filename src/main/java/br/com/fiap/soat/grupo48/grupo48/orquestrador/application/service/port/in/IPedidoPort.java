@@ -2,8 +2,6 @@ package br.com.fiap.soat.grupo48.grupo48.orquestrador.application.service.port.i
 
 import br.com.fiap.soat.grupo48.grupo48.orquestrador.application.domain.model.Pedido;
 
-import java.util.UUID;
-
 public interface IPedidoPort {
-    Pedido salvarPasso(UUID pedidoId, String nomePasso, String situacao);
+    Pedido salvarPasso(String pedidoId, String identificacao, String nomePasso, String situacao);
 }
