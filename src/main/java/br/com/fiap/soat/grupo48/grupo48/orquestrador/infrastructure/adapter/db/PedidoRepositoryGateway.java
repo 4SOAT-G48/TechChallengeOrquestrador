@@ -38,9 +38,9 @@ public class PedidoRepositoryGateway implements IPedidoRepository {
 
     @Override
     public Pedido salvar(String pedidoId, String identificacao, String nomePasso, String situacao) {
-        Optional<PedidoEntity> pedidoRecuperado = this.springPedidoRepository.findByIdentificacao(identificacao);
+        Optional<PedidoEntity> pedidoRecuperado = this.springPedidoRepository.findByPedidoId(pedidoId);
         if (!pedidoRecuperado.isPresent()) {
-            pedidoRecuperado = this.springPedidoRepository.findByPedidoId(pedidoId);
+            pedidoRecuperado = this.springPedidoRepository.findByIdentificacao(identificacao);
         }
 
         PedidoEntity pedido = pedidoRecuperado

@@ -10,4 +10,8 @@ public interface IPedidoPublishQueueAdapter {
     void publishRegistrado(@Payload String message);
 
     void publishRegistradoErro(String message);
+
+    void publishPagamentoIniciado(@Payload String message);
+
+    void publishPagamentoIniciadoErro(@Payload String message);
 }
