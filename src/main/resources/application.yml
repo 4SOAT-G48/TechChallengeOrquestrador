@@ -78,6 +78,10 @@ message:
       reprovado:
         route-key: ${ROUTEKEY_ORQUESTRADOR_PAGAMENTO_REPROVADO}
         queues: ${QUEUES_ORQUESTRADOR_PAGAMENTO_REPROVADO}
+    producao:
+      atualiza-situacao:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PRODUCAO_ATUALIZA_SITUACAO}
+        queues: ${QUEUES_ORQUESTRADOR_PRODUCAO_ATUALIZA_SITUACAO}
   publish:
     pedido:
       recebido:
@@ -109,16 +113,16 @@ message:
           exchange: ${EXCHANGE_PAGAMENTO_ENVIA_ERRO}
           route-key: ${ROUTEKEY_PAGAMENTO_ENVIA_ERRO}
     producao:
-      envia:
-        exchange: ${EXCHANGE_PRODUCAO_ENVIA}
-        route-key: ${ROUTEKEY_PRODUCAO_ENVIA}
+      inicia-pedido:
+        exchange: ${EXCHANGE_PRODUCAO_INICIA_PEDIDO}
+        route-key: ${ROUTEKEY_PRODUCAO_INICIA_PEDIDO}
         erro:
-          exchange: ${EXCHANGE_PRODUCAO_ENVIA_ERRO}
-          route-key: ${ROUTEKEY_PRODUCAO_ENVIA_ERRO}
-    notifica-usuario:
-      mensagem:
-        exchange: ${EXCHANGE_NOTIFICA_USUARIO_MENSAGEM}
-        route-key: ${ROUTEKEY_NOTIFICA_USUARIO_MENSAGEM}
+          exchange: ${EXCHANGE_PRODUCAO_INICIA_PEDIDO_ERRO}
+          route-key: ${ROUTEKEY_PRODUCAO_INICIA_PEDIDO_ERRO}
+    notifica-cliente:
+      atualiza-situacao:
+        exchange: ${EXCHANGE_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO}
+        route-key: ${ROUTEKEY_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO}
         erro:
-          exchange: ${EXCHANGE_NOTIFICA_USUARIO_MENSAGEM_ERRO}
-          route-key: ${ROUTEKEY_NOTIFICA_USUARIO_MENSAGEM_ERRO}
+          exchange: ${EXCHANGE_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO_ERRO}
+          route-key: ${ROUTEKEY_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO_ERRO}
