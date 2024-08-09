@@ -1,0 +1,85 @@
+version: '3.3'
+
+services:
+  orquestrador:
+    build: .
+    ports:
+      - "8090:8080"
+    env_file: .env
+    environment:
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_PORT: ${MONGO_PORT}
+      MONGO_DB: ${MONGO_DB}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_PID_FILE: /var/lib/rabbitmq/mnesia/rabbitmq
+    depends_on:
+      - mongo
+      - rabbitmq
+    volumes:
+      - ./rabbitmq/init-rabbitmq.sh:/etc/rabbitmq/init-rabbitmq.sh
+    command: /etc/rabbitmq/init-rabbitmq.sh
+    networks:
+      - orquestrador-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    #    command: /bin/sh -c "echo 'Root User:' && echo $MONGO_INITDB_ROOT_USERNAME && echo 'Root Password:' && echo $MONGO_INITDB_ROOT_PASSWORD && mongod"
+    ports:
+      - "27017:27017"
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongodb-data:/data/db/
+      - mongodb-log:/var/log/mongodb/
+    networks:
+      - orquestrador-network
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    env_file: .env
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD}
+    ports:
+      - 8091:8081
+    networks:
+      - orquestrador-network
+    depends_on:
+      - mongo
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file: .env
+    environment:
+      - RABBITMQ_DEFAULT_USER:${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS:${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - orquestrador-network
+
+volumes:
+  mongodb-data:
+    driver: local
+  mongodb-log:
+    driver: local
+  rabbitmq-data:
+    driver: local
+
+networks:
+  orquestrador-network:
