@@ -70,6 +70,9 @@ env:
   EXCHANGE_MONITOR_ATUALIZA_SITUACAO: ${{ vars.EXCHANGE_MONITOR_ATUALIZA_SITUACAO }}
   ROUTEKEY_MONITOR_ATUALIZA_SITUACAO: ${{ vars.ROUTEKEY_MONITOR_ATUALIZA_SITUACAO }}
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -85,7 +88,6 @@ jobs:
           java-version: 21
 
       - name: Build with Maven
-        run: mvn package -DskipTests
         env:
           AWS_REGION: ${{ env.AWS_REGION }}
           ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
@@ -145,6 +147,7 @@ jobs:
           ROUTEKEY_PRODUCAO_INICIA_PEDIDO: ${{ env.ROUTEKEY_PRODUCAO_INICIA_PEDIDO }}
           EXCHANGE_MONITOR_ATUALIZA_SITUACAO: ${{ env.EXCHANGE_MONITOR_ATUALIZA_SITUACAO }}
           ROUTEKEY_MONITOR_ATUALIZA_SITUACAO: ${{ env.ROUTEKEY_MONITOR_ATUALIZA_SITUACAO }}
+        run: mvn package -DskipTests
 
       #      - name: Test with Maven
       #        run: mvn test
