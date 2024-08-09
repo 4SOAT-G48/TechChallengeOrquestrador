@@ -8,7 +8,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   profiles:
-    active: ${SPRING_PROFILE}
+    active: ${SPRING_PROFILE:none}
   data:
     mongodb:
       host: ${MONGO_HOST}
