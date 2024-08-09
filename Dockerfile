@@ -22,7 +22,7 @@ FROM eclipse-temurin:21-jdk-alpine
 COPY --from=build /app/target/grupo48-orquestrador-0.0.1-SNAPSHOT.jar /app.jar
 
 # Porta padrão da aplicação Spring Boot
-EXPOSE 8090
+EXPOSE 8089
 
 # Montagem de volume para registro de logs
 VOLUME /logs
