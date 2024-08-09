@@ -1,0 +1,128 @@
+server:
+  port: ${SERVER_PORT}
+
+
+spring:
+  application:
+    name: grupo48-orquestrador
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    active: ${SPRING_PROFILE}
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+      database: ${MONGO_DB}
+      uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  output:
+    ansi:
+      enabled: ALWAYS
+
+camel:
+  springboot:
+    autoConfigurationEnabled: true
+    # keep the application running
+    main-run-controller: true
+  component:
+    spring-rabbitmq:
+      auto-declare: true
+
+logging:
+  level:
+    org.springframework: ${LOG_LEVEL}
+    org.apache.camel: ${LOG_LEVEL}
+    org.springframework.data.mongodb: ${LOG_LEVEL}
+    com.mongodb: ${LOG_LEVEL}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui-custom.html
+
+
+message:
+  orquestrador:
+    exchange: ${EXCHANGE_ORQUESTRADOR}
+    pedido:
+      recebido:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_RECEBIDO}
+        queues: ${QUEUES_ORQUESTRADOR_PEDIDO_RECEBIDO}
+        erro:
+          route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_RECEBIDO_ERRO}
+          queues: ${QUEUES_ORQUESTRADOR_PEDIDO_RECEBIDO_ERRO}
+      registrado:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_REGISTRADO}
+        queues: ${QUEUES_ORQUESTRADOR_PEDIDO_REGISTRADO}
+        erro:
+          route-key: ${ROUTEKEY_ORQUESTRADOR_PEDIDO_REGISTRADO_ERRO}
+          queues: ${QUEUES_ORQUESTRADOR_PEDIDO_REGISTRADO_ERRO}
+    pagamento:
+      criado:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PAGAMENTO_CRIADO}
+        queues: ${QUEUES_ORQUESTRADOR_PAGAMENTO_CRIADO}
+      aguardando-pagamento:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PAGAMENTO_AGUARDANDO_PAGAMENTO}
+        queues: ${QUEUES_ORQUESTRADOR_PAGAMENTO_AGUARDANDO_PAGAMENTO}
+      aprovado:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PAGAMENTO_APROVADO}
+        queues: ${QUEUES_ORQUESTRADOR_PAGAMENTO_APROVADO}
+      reprovado:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PAGAMENTO_REPROVADO}
+        queues: ${QUEUES_ORQUESTRADOR_PAGAMENTO_REPROVADO}
+    producao:
+      atualiza-situacao:
+        route-key: ${ROUTEKEY_ORQUESTRADOR_PRODUCAO_ATUALIZA_SITUACAO}
+        queues: ${QUEUES_ORQUESTRADOR_PRODUCAO_ATUALIZA_SITUACAO}
+  publish:
+    pedido:
+      recebido:
+        exchange: ${EXCHANGE_PEDIDO_RECEBIDO}
+        route-key: ${ROUTEKEY_PEDIDO_RECEBIDO}
+        erro:
+          exchange: ${EXCHANGE_PEDIDO_RECEBIDO_ERRO}
+          route-key: ${ROUTEKEY_PEDIDO_RECEBIDO_ERRO}
+      registrado:
+        exchange: ${EXCHANGE_PEDIDO_REGISTRADO}
+        route-key: ${ROUTEKEY_PEDIDO_REGISTRADO}
+        erro:
+          exchange: ${EXCHANGE_PEDIDO_REGISTRADO_ERRO}
+          route-key: ${ROUTEKEY_PEDIDO_REGISTRADO_ERRO}
+      atualiza-situacao:
+        exchange: ${EXCHANGE_PEDIDO_ATUALIZA_SITUACAO}
+        route-key: ${ROUTEKEY_PEDIDO_ATUALIZA_SITUACAO}
+    pagamento:
+      cria:
+        exchange: ${EXCHANGE_PAGAMENTO_CRIA}
+        route-key: ${ROUTEKEY_PAGAMENTO_CRIA}
+        erro:
+          exchange: ${EXCHANGE_PAGAMENTO_CRIA_ERRO}
+          route-key: ${ROUTEKEY_PAGAMENTO_CRIA_ERRO}
+      envia:
+        exchange: ${EXCHANGE_PAGAMENTO_ENVIA}
+        route-key: ${ROUTEKEY_PAGAMENTO_ENVIA}
+        erro:
+          exchange: ${EXCHANGE_PAGAMENTO_ENVIA_ERRO}
+          route-key: ${ROUTEKEY_PAGAMENTO_ENVIA_ERRO}
+    producao:
+      inicia-pedido:
+        exchange: ${EXCHANGE_PRODUCAO_INICIA_PEDIDO}
+        route-key: ${ROUTEKEY_PRODUCAO_INICIA_PEDIDO}
+        erro:
+          exchange: ${EXCHANGE_PRODUCAO_INICIA_PEDIDO_ERRO}
+          route-key: ${ROUTEKEY_PRODUCAO_INICIA_PEDIDO_ERRO}
+    notifica-cliente:
+      atualiza-situacao:
+        exchange: ${EXCHANGE_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO}
+        route-key: ${ROUTEKEY_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO}
+        erro:
+          exchange: ${EXCHANGE_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO_ERRO}
+          route-key: ${ROUTEKEY_NOTIFICA_CLIENTE_ATUALIZA_SITUACAO_ERRO}
